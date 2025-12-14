@@ -1,0 +1,40 @@
+INFO 12-14 20:45:56 [utils.py:253] non-default args: {'dtype': 'float16', 'seed': None, 'disable_log_stats': True, 'model': 'llama3_8b-INT8-W8A16'}
+WARNING 12-14 20:45:56 [arg_utils.py:1175] `seed=None` is equivalent to `seed=0` in V1 Engine. You will no longer be allowed to pass `None` in v0.13.
+INFO 12-14 20:45:56 [model.py:637] Resolved architecture: LlamaForCausalLM
+WARNING 12-14 20:45:56 [model.py:2089] Casting torch.bfloat16 to torch.float16.
+INFO 12-14 20:45:56 [model.py:1750] Using max model len 8192
+INFO 12-14 20:46:02 [scheduler.py:228] Chunked prefill is enabled with max_num_batched_tokens=8192.
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:03 [core.py:93] Initializing a V1 LLM engine (v0.12.0) with config: model='llama3_8b-INT8-W8A16', speculative_config=None, tokenizer='llama3_8b-INT8-W8A16', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=compressed-tensors, enforce_eager=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01), seed=0, served_model_name=llama3_8b-INT8-W8A16, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer'], 'compile_mm_encoder': False, 'compile_sizes': [], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>}, 'local_cache_dir': None}
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:08 [parallel_state.py:1200] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.16.32.2:47149 backend=nccl
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:08 [parallel_state.py:1408] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank 0
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:09 [gpu_model_runner.py:3467] Starting to load model llama3_8b-INT8-W8A16...
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:09 [compressed_tensors_wNa16.py:114] Using AllSparkLinearKernel for CompressedTensorsWNA16
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:15 [cuda.py:411] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION']
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:45 [default_loader.py:308] Loading weights took 29.35 seconds
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:46:45 [gpu_model_runner.py:3549] Model loading took 8.4622 GiB memory and 36.000854 seconds
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:06 [backends.py:655] Using cache directory: /root/.cache/vllm/torch_compile_cache/49812bb121/rank_0_0/backbone for vLLM's torch.compile
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:06 [backends.py:715] Dynamo bytecode transform time: 20.63 s
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:10 [backends.py:216] Directly load the compiled graph(s) for dynamic shape from the cache, took 3.188 s
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:12 [monitor.py:34] torch.compile takes 23.82 s in total
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:14 [gpu_worker.py:359] Available KV cache memory: 30.04 GiB
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:14 [kv_cache_utils.py:1286] GPU KV cache size: 246,048 tokens
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:14 [kv_cache_utils.py:1291] Maximum concurrency for 8,192 tokens per request: 30.04x
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:19 [gpu_model_runner.py:4466] Graph capturing finished in 5 secs, took 0.56 GiB
+[0;36m(EngineCore_DP0 pid=11557)[0;0m INFO 12-14 20:47:19 [core.py:254] init engine (profile, create kv cache, warmup model) took 33.43 seconds
+INFO 12-14 20:47:20 [llm.py:343] Supported tasks: ['generate']
+
+Model load time: 84.08s
+GPU memory (model load): 43.95 GB
+
+===== BENCHMARK RESULTS =====
+{
+  "model": "llama3_8b-INT8-W8A16",
+  "dtype": "float16",
+  "load_time_sec": 84.079,
+  "model_mem_gb": 43.952,
+  "seq_5_latency_sec": 10.396,
+  "batch_5_latency_sec": 2.161,
+  "throughput_tok_per_sec": 296.15,
+  "seq_peak_mem_gb": 44.826,
+  "batch_peak_mem_gb": 44.826
+}
