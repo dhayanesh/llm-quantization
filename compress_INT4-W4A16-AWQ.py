@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 MODEL_ID = "llama3_8b"
-SAVE_DIR = MODEL_ID + "-INT8-W8A16-qm"
+SAVE_DIR = MODEL_ID + "-INT4-W4A16-AWQ"
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_ID,
@@ -33,22 +33,20 @@ ds = ds.map(tokenize, remove_columns=ds.column_names)
 # load model and quantize
 from llmcompressor import oneshot
 from llmcompressor.modifiers.quantization import QuantizationModifier
+from llmcompressor.modifiers.smoothquant import SmoothQuantModifier
 
-recipe = [
-    # SmoothQuantModifier(smoothing_strength=0.8), #only for activations
-    QuantizationModifier(targets="Linear", scheme="W8A16", ignore=["lm_head"]),
-]
+recipe = QuantizationModifier(targets="Linear", scheme="W4A16_ASYM", ignore=["lm_head"])
 
-#actually caliberation data was ignored here with QuantizationModifier
 oneshot(
     model=model,
     recipe=recipe,
     dataset=ds,
     max_seq_length=MAX_SEQUENCE_LENGTH,
     num_calibration_samples=NUM_CALIBRATION_SAMPLES,
+    output_dir=SAVE_DIR
 )
 
-model.save_pretrained(SAVE_DIR, save_compressed=True)
-tokenizer.save_pretrained(SAVE_DIR)
+# model.save_pretrained(SAVE_DIR, save_compressed=True)
+# tokenizer.save_pretrained(SAVE_DIR)
 
 print("Quantized model saved at:", SAVE_DIR)

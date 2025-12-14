@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 MODEL_ID = "llama3_8b"
-SAVE_DIR = MODEL_ID + "-INT8-W8A8"
+SAVE_DIR = MODEL_ID + "-INT8-W8A16-RTN"
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_ID,
@@ -32,15 +32,14 @@ ds = ds.map(tokenize, remove_columns=ds.column_names)
 
 # load model and quantize
 from llmcompressor import oneshot
-from llmcompressor.modifiers.quantization import GPTQModifier
-from llmcompressor.modifiers.smoothquant import SmoothQuantModifier
+from llmcompressor.modifiers.quantization import QuantizationModifier
 
 recipe = [
-    SmoothQuantModifier(smoothing_strength=0.8),
-    GPTQModifier(targets="Linear", scheme="W8A8", ignore=["lm_head"]),
+    # SmoothQuantModifier(smoothing_strength=0.8), #only for activations
+    QuantizationModifier(targets="Linear", scheme="W8A16", ignore=["lm_head"]),
 ]
 
-
+#actually caliberation data was ignored here with QuantizationModifier
 oneshot(
     model=model,
     recipe=recipe,

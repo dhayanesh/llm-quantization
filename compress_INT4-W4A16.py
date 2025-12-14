@@ -43,9 +43,10 @@ oneshot(
     dataset=ds,
     max_seq_length=MAX_SEQUENCE_LENGTH,
     num_calibration_samples=NUM_CALIBRATION_SAMPLES,
+    output_dir=SAVE_DIR
 )
 
-model.save_pretrained(SAVE_DIR, save_compressed=True)
-tokenizer.save_pretrained(SAVE_DIR)
+# model.save_pretrained(SAVE_DIR, save_compressed=True)
+# tokenizer.save_pretrained(SAVE_DIR)
 
 print("Quantized model saved at:", SAVE_DIR)
