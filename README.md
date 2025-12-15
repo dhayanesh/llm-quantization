@@ -28,8 +28,15 @@ This project provides tools for quantizing large language models (LLMs) using va
 ├── vllm_test.py                   # Simple vLLM inference test
 ├── run_benchmark.sh               # Batch benchmarking script
 ├── run_benchmark_lm-eval.sh       # Batch evaluation script
+├── run_inspection.sh              # Batch model inspection script
+├── analysis_summary.md            # Detailed analysis of quantization results
+├── examples/                      # Example scripts (legacy compression scripts)
+│   ├── compress_*.py              # Individual compression examples
+│   ├── vllm_pp.py                 # vLLM pipeline parallelism example
+│   └── vllm_tp.py                 # vLLM tensor parallelism example
 ├── eval_results/                  # Evaluation results (JSON)
-└── perf_results/                  # Performance benchmark results (JSON)
+├── perf_results/                  # Performance benchmark results (JSON)
+└── inspect_results/               # Model inspection results (JSON)
 ```
 
 ## Installation
@@ -139,12 +146,19 @@ bash run_benchmark_lm-eval.sh
 
 Results are saved to `eval_results/` directory.
 
-### 5. Analyze Quantized Model
+### 5. Inspect Quantized Model
 
 Inspect a quantized model checkpoint:
 
 ```bash
-python inspect_model.py (or run the script for all all models)
+# Inspect a single model
+python inspect_model.py llama3_8b-INT8-W8A8
+
+# Inspect multiple models
+python inspect_model.py llama3_8b llama3_8b-INT8-W8A8 llama3_8b-INT4-W4A16
+
+# Run inspection for all models
+bash run_inspection.sh
 ```
 
 This script:
@@ -152,6 +166,23 @@ This script:
 - Analyzes tensor dtypes in the checkpoint
 - Checks runtime behavior with vLLM
 - Provides hints about quantization format
+- Saves inspection results to `inspect_results/` directory
+
+### 6. Review Analysis Summary
+
+After running benchmarks, evaluations, and inspections, review the comprehensive analysis:
+
+```bash
+# View the analysis summary
+cat analysis_summary.md
+```
+
+The `analysis_summary.md` document provides:
+- Detailed performance comparisons across all quantization methods
+- Accuracy evaluation results on multiple benchmarks
+- GPU-specific insights and hardware limitations
+- Recommendations for different use cases
+- Task-by-task performance breakdown
 
 ## Compression Methods Explained
 
@@ -190,6 +221,18 @@ This script:
 The project includes example results in:
 - `perf_results/`: Performance benchmarks (latency, throughput, memory)
 - `eval_results/`: Model quality evaluations (GSM8K, HellaSwag, PIQA, ARC-Easy)
+- `inspect_results/`: Model checkpoint inspection results (metadata, dtypes, runtime config)
+- `analysis_summary.md`: Comprehensive analysis comparing all quantization methods
+
+## Examples
+
+The `examples/` directory contains:
+- **Legacy compression scripts**: Individual `compress_*.py` files for each quantization type (now superseded by unified `compress.py`)
+- **vLLM parallelism examples**: 
+  - `vllm_pp.py`: Pipeline parallelism example
+  - `vllm_tp.py`: Tensor parallelism example
+
+These examples demonstrate advanced usage patterns and can be used as templates for custom implementations.
 
 ## Notes
 
