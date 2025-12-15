@@ -87,10 +87,8 @@ This analysis compares the performance and accuracy of Llama3 8B model across di
 | **FP8-W8A8** | 44.87 | 1.00x (similar) | 30.25 GiB |
 
 **Key Observations:**
-- Peak memory usage is consistent across all configurations (~45 GB)
-- Quantization primarily improves compute efficiency, not memory footprint in this setup
+- Peak memory usage is consistent across all configurations due to vLLM pre-allocation(~45 GB)
 - INT4 models have slightly more KV cache available (33.4 GiB vs 30.0 GiB for INT8)
-- Memory savings from weight quantization are offset by runtime overhead and KV cache requirements
 
 ---
 
@@ -262,8 +260,7 @@ Despite configuration names suggesting different activation precisions, all mode
 ### Performance Implications
 1. **Weight-only quantization is still highly effective** - 1.8x to 2.9x speedup
 2. **Optimized kernels** for quantized weights provide significant benefits
-3. **Memory savings** from weight quantization are minimal in this setup
-4. **KV cache** benefits slightly from quantized weights (more cache available)
+3. **KV cache** benefits slightly from quantized weights (more cache available)
 
 ### Future Considerations
 - **H100 or newer GPUs** would enable true FP8 activation computation
