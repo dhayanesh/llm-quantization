@@ -8,9 +8,6 @@ from vllm import LLM, SamplingParams
 import pynvml
 
 
-########################################
-# ARGUMENTS
-########################################
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, required=True)
@@ -20,9 +17,6 @@ def parse_args():
     return parser.parse_args()
 
 
-########################################
-# PROMPTS
-########################################
 PROMPTS = [
     "Explain why GPUs are useful for deep learning.",
     "What is quantization in neural networks?",
@@ -32,9 +26,7 @@ PROMPTS = [
 ]
 
 
-########################################
-# NVML GPU UTILS (device-level, vLLM-safe)
-########################################
+# nvml gpu utils
 def nvml_init():
     pynvml.nvmlInit()
 
@@ -63,10 +55,6 @@ def measure_peak_gpu_used(fn, device_index=0, interval=0.05):
 
     return peak
 
-
-########################################
-# MAIN
-########################################
 def main():
     args = parse_args()
     nvml_init()
@@ -76,9 +64,7 @@ def main():
     MAX_TOKENS = args.max_tokens
     GPU = args.gpu
 
-    ########################################
-    # MODEL LOAD
-    ########################################
+    # model load
     base_mem = gpu_used_gb(GPU)
     start_load = time.time()
 
@@ -100,21 +86,15 @@ def main():
         max_tokens=MAX_TOKENS,
     )
 
-    ########################################
-    # DRY RUN (graph capture / compile)
-    ########################################
+    # dry run (graph capture / compile)
     llm.generate(["Dry run prompt"], sampling)
     torch.cuda.synchronize()
 
-    ########################################
-    # WARMUP
-    ########################################
+    # warmup
     llm.generate(["Warmup prompt"], sampling)
     torch.cuda.synchronize()
 
-    ########################################
-    # SEQUENTIAL LATENCY
-    ########################################
+    # sequential latency
     def run_sequential():
         for p in PROMPTS:
             llm.generate([p], sampling)
@@ -124,9 +104,7 @@ def main():
     seq_peak = measure_peak_gpu_used(run_sequential, GPU)
     seq_time = time.time() - start
 
-    ########################################
-    # BATCH LATENCY
-    ########################################
+    # batch latency
     def run_batch():
         nonlocal outs
         outs = llm.generate(PROMPTS, sampling)
@@ -137,15 +115,10 @@ def main():
     batch_peak = measure_peak_gpu_used(run_batch, GPU)
     batch_time = time.time() - start
 
-    ########################################
-    # TOKEN COUNT / THROUGHPUT
-    ########################################
+    #token count / throughput
     total_tokens = sum(len(o.outputs[0].token_ids) for o in outs)
     throughput = total_tokens / batch_time
 
-    ########################################
-    # RESULTS
-    ########################################
     results = {
         "model": MODEL_PATH,
         "dtype": DTYPE,
@@ -162,8 +135,5 @@ def main():
     print(json.dumps(results, indent=2))
 
 
-########################################
-# ENTRY POINT
-########################################
 if __name__ == "__main__":
     main()

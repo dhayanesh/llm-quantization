@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Unified compression script that supports multiple quantization schemes.
 Usage: python compress.py --compression_type <TYPE> [--model_id <MODEL_ID>]
