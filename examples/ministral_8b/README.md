@@ -58,7 +58,7 @@ Evaluations use **250 samples**, **5-shot**, tasks: `gsm8k`, `hellaswag`, `piqa`
 
 INT4 retains most of the baseline accuracy; HellaSwag (acc_norm) is slightly higher for INT4 (74.0% vs 73.2%). GSM8K and ARC-Easy are somewhat lower for INT4.
 
-
+# -----------------------------------------------------------------------
 
 # Infernece Runtime Performance Comparison
 
@@ -77,3 +77,32 @@ INT4 retains most of the baseline accuracy; HellaSwag (acc_norm) is slightly hig
 |---|---:|---:|---:|
 | Ministral-8B-Instruct-2410 | 14.97 | 23.69 | 41824.19 |
 | Ministral-8B-Instruct-2410-INT4-W4A16 | 5.36 | 33.29 | 41836.19 |
+
+# -----------------------------------------------------------------------
+
+# Quantized vLLM KV Cache Strategy Comparison
+
+## Setup
+
+- Model: `Ministral-8B-Instruct-2410-INT4-W4A16`
+- Total traffic: `256` requests, global concurrency `32`, max_tokens `128`
+- Scenario A (single_large_kv): 1 instance, `gpu-memory-utilization=0.9`
+- Scenario B (dual_half_kv): 2 instances, each `gpu-memory-utilization=0.45`
+- Scenario B explicit KV target per instance: `13.32 GiB`
+- CUDA_VISIBLE_DEVICES: `0`
+
+## Throughput and Response Time
+
+| Scenario | Startup (s) | Runtime (s) | Req/s | Completion tok/s | P50 latency (s) | P95 latency (s) | P99 latency (s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| single_large_kv | 44.14 | 12.60 | 20.32 | 2068.47 | 1.559 | 1.645 | 1.663 |
+| dual_half_kv | 48.26 | 21.85 | 11.72 | 1194.82 | 2.673 | 2.808 | 2.871 |
+
+## KV Cache Observations (from vLLM logs)
+
+| Scenario | Instance | Available KV cache (GiB) | KV cache tokens | Model load mem (GiB) |
+|---|---|---:|---:|---:|
+| single_large_kv | A | 33.29 | 242416 | 5.36 |
+| dual_half_kv | A | 13.32 | 96960 | 5.36 |
+| dual_half_kv | B | 13.32 | 96960 | 5.36 |
+
