@@ -57,3 +57,23 @@ Evaluations use **250 samples**, **5-shot**, tasks: `gsm8k`, `hellaswag`, `piqa`
 - `lm_eval_ministral_8b-INT4-W4A16_250_2026-02-14T22-41-23.282639.json` — INT4-W4A16
 
 INT4 retains most of the baseline accuracy; HellaSwag (acc_norm) is slightly higher for INT4 (74.0% vs 73.2%). GSM8K and ARC-Easy are somewhat lower for INT4.
+
+
+
+# Infernece Runtime Performance Comparison
+
+- GPU 0: NVIDIA A40 (46068 MiB total)
+
+## Runtime Results
+
+| Model | Startup (s) | Runtime (s) | Req/s | Completion tok/s | P50 latency (s) | P95 latency (s) |
+|---|---:|---:|---:|---:|---:|---:|
+| Ministral-8B-Instruct-2410 | 47.26 | 11.45 | 5.59 | 478.86 | 2.860 | 2.891 |
+| Ministral-8B-Instruct-2410-INT4-W4A16 | 43.18 | 4.12 | 15.53 | 1226.56 | 1.014 | 1.092 |
+
+## GPU Memory Utilization
+
+| Model | Model load mem (GiB) | Available KV cache (GiB) | Peak delta vs baseline (MiB) |
+|---|---:|---:|---:|
+| Ministral-8B-Instruct-2410 | 14.97 | 23.69 | 41824.19 |
+| Ministral-8B-Instruct-2410-INT4-W4A16 | 5.36 | 33.29 | 41836.19 |
