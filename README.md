@@ -37,6 +37,8 @@ This project provides tools for quantizing large language models (LLMs) using va
 ├── eval_results/                  # Evaluation results (JSON)
 ├── perf_results/                  # Performance benchmark results (JSON)
 └── inspect_results/               # Model inspection results (JSON)
+└── ministral_8b/                  # Benchmarks for ministral-8b
+└── kv-quantization/               # Experiments on Quantized KV Cache
 ```
 
 ## Installation
@@ -231,7 +233,6 @@ The `examples/` directory contains:
 - **vLLM parallelism examples**: 
   - `vllm_pp.py`: Pipeline parallelism example
   - `vllm_tp.py`: Tensor parallelism example
-  - `/ministral_8b`: Benchmarks for ministral-8b
 
 These examples demonstrate advanced usage patterns and can be used as templates for custom implementations.
 
